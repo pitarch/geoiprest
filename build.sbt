@@ -17,6 +17,14 @@ lazy val root = (project in file("."))
       "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0" % Test,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Runtime
     ),
+    testFrameworks += new TestFramework("org.scalatest.tools.Framework"),
+    scalacOptions ~= { options: Seq[String] =>
+      options.filterNot(
+        Set(
+          "-Wnonunit-statement"
+        )
+      )
+    },
     addCompilerPlugin(
       "org.typelevel" %% "kind-projector" % "0.13.2" cross CrossVersion.full
     ),
