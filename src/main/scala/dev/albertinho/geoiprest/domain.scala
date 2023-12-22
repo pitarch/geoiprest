@@ -24,7 +24,14 @@ object domain {
     }
   }
 
-  final case class Ipv4Range(start: Ipv4, end: Ipv4)
+  final case class Ipv4Range(start: Ipv4, end: Ipv4) {
+
+    def contains(ip: Ipv4): Boolean =
+      ip.toLong >= start.toLong && ip.toLong <= end.toLong
+
+    def isSubset(other: Ipv4Range): Boolean =
+      contains(other.start) && contains(other.end)
+  }
 
   final case class IpRangeGeoInfo(
       ipRange: Ipv4Range,

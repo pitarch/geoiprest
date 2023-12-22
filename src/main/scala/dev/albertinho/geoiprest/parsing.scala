@@ -5,6 +5,10 @@ import domain.IpRangeGeoInfo
 import cats.ApplicativeError
 object parsing {
 
+  trait Parser[F[_]] {
+    def parse(line: String): F[IpRangeGeoInfo]
+  }
+
   def parseLine[F[_]](
       line: String
   )(implicit F: ApplicativeError[F, Throwable]): F[IpRangeGeoInfo] = {
