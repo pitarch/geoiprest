@@ -1,21 +1,19 @@
-package dev.albertinho.geoiprest.infra
+package dev.albertinho.geoiprest.infra.db
 
-import dev.albertinho.geoiprest.domain
+import dev.albertinho.geoiprest.{domain, parsing}
 import fs2.io.file.Files
-import dev.albertinho.geoiprest.parsing
+
 import scala.util.Try
 
-trait Dbipcityv4Loader[F[_]] {
+trait Loader[F[_]] {
 
   def stream: fs2.Stream[F, (Long, Try[domain.IpRangeGeoInfo])]
 }
 
-object Dbipcityv4Loader {
+object Loader {
 
-  import cats.implicits._
-
-  def fromFile[F[_]: Files](file: String): Dbipcityv4Loader[F] =
-    new Dbipcityv4Loader[F] {
+  def fromFile[F[_]: Files](file: String): Loader[F] =
+    new Loader[F] {
       override def stream: fs2.Stream[F, (Long, Try[domain.IpRangeGeoInfo])] =
         fs2.io.file
           .Files[F]
@@ -23,8 +21,8 @@ object Dbipcityv4Loader {
           .through(parseLine)
     }
 
-  def fromString[F[_]](content: String): Dbipcityv4Loader[F] =
-    new Dbipcityv4Loader[F] {
+  def fromString[F[_]](content: String): Loader[F] =
+    new Loader[F] {
       override def stream: fs2.Stream[F, (Long, Try[domain.IpRangeGeoInfo])] =
         fs2.Stream
           .emits(content.split("\n"))

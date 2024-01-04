@@ -6,8 +6,9 @@ import org.scalatest.matchers.should.Matchers
 import cats.effect.IO
 import org.scalatest.Inspectors
 import cats.effect.kernel.Resource
+import dev.albertinho.geoiprest.infra.db.Loader
 
-class Dbipcityv4LoaderTest
+class LoaderTest
     extends AsyncFlatSpec
     with AsyncIOSpec
     with Matchers
@@ -22,7 +23,7 @@ class Dbipcityv4LoaderTest
 
   it should "be read and parsed when empty" in {
     val content = ""
-    val loader = Dbipcityv4Loader.fromString[IO](content)
+    val loader = Loader.fromString[IO](content)
     loader.stream.compile.toList.asserting { result =>
       result shouldBe empty
     }
@@ -30,7 +31,7 @@ class Dbipcityv4LoaderTest
 
   it should "be read and parsed when non-empty" in {
 
-    val loader = Dbipcityv4Loader.fromString[IO](content)
+    val loader = Loader.fromString[IO](content)
     val resultIO = loader.stream.compile.toList
     resultIO.asserting { result =>
       result should have length 2
@@ -47,7 +48,7 @@ class Dbipcityv4LoaderTest
 
   it should "read and parse" in {
     createFileResourceWithContent(content).use { path =>
-      val loader = Dbipcityv4Loader.fromFile[IO](path.toString)
+      val loader = Loader.fromFile[IO](path.toString)
       val resultIO = loader.stream.compile.toList
       resultIO.asserting { result =>
         result should have length 2

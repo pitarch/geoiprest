@@ -22,6 +22,17 @@ object domain {
       val bytes = parts.map(_.toInt)
       Ipv4((bytes(0), bytes(1), bytes(2), bytes(3)))
     }
+
+    implicit val ordering: Ordering[Ipv4] =
+      Ordering.by(ipv4 => (ipv4.part1, ipv4.part2, ipv4.part3, ipv4.part4))
+
+    def fromLong(ip: Long): Ipv4 = {
+      val part1 = (ip >> 24) & 0xFF
+      val part2 = (ip >> 16) & 0xFF
+      val part3 = (ip >> 8) & 0xFF
+      val part4 = ip & 0xFF
+      Ipv4((part1.toInt, part2.toInt, part3.toInt, part4.toInt))
+    }
   }
 
   final case class Ipv4Range(start: Ipv4, end: Ipv4) {
@@ -31,6 +42,13 @@ object domain {
 
     def isSubset(other: Ipv4Range): Boolean =
       contains(other.start) && contains(other.end)
+  }
+
+  object Ipv4Range {
+
+    implicit val ordering: Ordering[Ipv4Range] = (x: Ipv4Range, y: Ipv4Range) => if (x.start.toLong < y.start.toLong) -1
+    else if (x.end.toLong > y.end.toLong) 1
+    else 0
   }
 
   final case class IpRangeGeoInfo(
