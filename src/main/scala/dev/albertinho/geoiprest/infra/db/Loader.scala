@@ -1,7 +1,6 @@
 package dev.albertinho.geoiprest.infra.db
 
 import dev.albertinho.geoiprest.domain._
-import dev.albertinho.geoiprest.parsing
 import fs2.io.file.Files
 
 import scala.util.Try
@@ -37,5 +36,5 @@ object Loader {
       .map { _.trim() }
       .zipWithIndex
       .filter { case (line, _) => line.nonEmpty }
-      .map { case (line, index) => (index, parsing.parseLineUnsafe(line)) }
+      .map { case (line, index) => (index, Parser.parseLineUnsafe(line)) }
 }

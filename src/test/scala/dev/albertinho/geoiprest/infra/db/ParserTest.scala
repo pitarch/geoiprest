@@ -1,11 +1,11 @@
-package dev.albertinho.geoiprest
+package dev.albertinho.geoiprest.infra.db
 
-import org.scalatest.flatspec.AsyncFlatSpec
-import cats.effect.testing.scalatest.AsyncIOSpec
-import org.scalatest.matchers.should.Matchers
 import cats.effect.IO
+import cats.effect.testing.scalatest.AsyncIOSpec
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ParsingTest extends AsyncFlatSpec with AsyncIOSpec with Matchers {
+class ParserTest extends AsyncFlatSpec with AsyncIOSpec with Matchers {
 
   // behavior of "parseLine"
 
@@ -14,7 +14,7 @@ class ParsingTest extends AsyncFlatSpec with AsyncIOSpec with Matchers {
       """31.31.91.0,31.31.91.255,ES,Valencia,,Port de Sagunt,,39.6621,-0.228449,"""
         .trim()
 
-    val result = parsing.parseLine[IO](line)
+    val result = Parser.parseLine[IO](line)
     result.asserting { info =>
       info.ipRange.start.toString() shouldEqual "31.31.91.0"
       info.ipRange.end.toString() shouldEqual "31.31.91.255"

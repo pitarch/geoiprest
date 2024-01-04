@@ -1,12 +1,11 @@
-package dev.albertinho.geoiprest.infra
+package dev.albertinho.geoiprest.infra.db
 
-import org.scalatest.flatspec.AsyncFlatSpec
-import cats.effect.testing.scalatest.AsyncIOSpec
-import org.scalatest.matchers.should.Matchers
 import cats.effect.IO
-import org.scalatest.Inspectors
 import cats.effect.kernel.Resource
-import dev.albertinho.geoiprest.infra.db.Loader
+import cats.effect.testing.scalatest.AsyncIOSpec
+import org.scalatest.Inspectors
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 class LoaderTest
     extends AsyncFlatSpec

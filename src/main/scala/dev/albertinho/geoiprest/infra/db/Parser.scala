@@ -1,13 +1,14 @@
-package dev.albertinho.geoiprest
+package dev.albertinho.geoiprest.infra.db
 
 import scala.util.Try
 import dev.albertinho.geoiprest.domain._
 import cats.ApplicativeError
-object parsing {
 
-  trait Parser[F[_]] {
-    def parse(line: String): F[IpRangeGeoInfo]
-  }
+trait Parser[F[_]] {
+  def parse(line: String): F[IpRangeGeoInfo]
+}
+
+object Parser {
 
   def parseLine[F[_]](
       line: String
@@ -36,4 +37,5 @@ object parsing {
       )
     }
   }
+
 }

@@ -1,12 +1,12 @@
-package dev.albertinho.geoiprest.infra
+package dev.albertinho.geoiprest
 
 import cats.effect.IO
 import cats.effect.std.Queue
 import cats.effect.testing.scalatest.AsyncIOSpec
 import cats.implicits._
-import org.scalatest.{Ignore, Inspectors}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.{Ignore, Inspectors}
 
 @Ignore
 class DistributionTest
