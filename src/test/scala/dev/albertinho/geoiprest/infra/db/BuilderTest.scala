@@ -2,12 +2,12 @@ package dev.albertinho.geoiprest.infra.db
 
 import cats.effect.IO
 import cats.effect.testing.scalatest.AsyncIOSpec
-import cats.implicits.toTraverseOps
-import dev.albertinho.geoiprest.domain.{IpRangeGeoInfo, Ipv4, Ipv4Range}
+import dev.albertinho.geoiprest.domain._
 import dev.albertinho.geoiprest.infra.db.BuilderTest.{createGeoInfo, createIpRangesWithSize}
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import cats.implicits._
 
 class BuilderTest
     extends AsyncFlatSpec

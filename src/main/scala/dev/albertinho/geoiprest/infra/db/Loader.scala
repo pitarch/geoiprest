@@ -1,20 +1,21 @@
 package dev.albertinho.geoiprest.infra.db
 
-import dev.albertinho.geoiprest.{domain, parsing}
+import dev.albertinho.geoiprest.domain._
+import dev.albertinho.geoiprest.parsing
 import fs2.io.file.Files
 
 import scala.util.Try
 
 trait Loader[F[_]] {
 
-  def stream: fs2.Stream[F, (Long, Try[domain.IpRangeGeoInfo])]
+  def stream: fs2.Stream[F, (Long, Try[IpRangeGeoInfo])]
 }
 
 object Loader {
 
   def fromFile[F[_]: Files](file: String): Loader[F] =
     new Loader[F] {
-      override def stream: fs2.Stream[F, (Long, Try[domain.IpRangeGeoInfo])] =
+      override def stream: fs2.Stream[F, (Long, Try[IpRangeGeoInfo])] =
         fs2.io.file
           .Files[F]
           .readUtf8Lines(fs2.io.file.Path(file))
@@ -23,7 +24,7 @@ object Loader {
 
   def fromString[F[_]](content: String): Loader[F] =
     new Loader[F] {
-      override def stream: fs2.Stream[F, (Long, Try[domain.IpRangeGeoInfo])] =
+      override def stream: fs2.Stream[F, (Long, Try[IpRangeGeoInfo])] =
         fs2.Stream
           .emits(content.split("\n"))
           .through(parseLine)
@@ -31,7 +32,7 @@ object Loader {
 
   private def parseLine[F[_]](
       input: fs2.Stream[F, String]
-  ): fs2.Stream[F, (Long, Try[domain.IpRangeGeoInfo])] =
+  ): fs2.Stream[F, (Long, Try[IpRangeGeoInfo])] =
     input
       .map { _.trim() }
       .zipWithIndex

@@ -1,7 +1,7 @@
 package dev.albertinho.geoiprest
 
 import scala.util.Try
-import domain.IpRangeGeoInfo
+import dev.albertinho.geoiprest.domain._
 import cats.ApplicativeError
 object parsing {
 
@@ -23,10 +23,10 @@ object parsing {
   def parseLineUnsafe(line: String): Try[IpRangeGeoInfo] = {
     val lineSplit = line.split(",")
     Try {
-      domain.IpRangeGeoInfo(
-        ipRange = domain.Ipv4Range(
-          start = domain.Ipv4(lineSplit(0)),
-          end = domain.Ipv4(lineSplit(1))
+      IpRangeGeoInfo(
+        ipRange = Ipv4Range(
+          start = Ipv4(lineSplit(0)),
+          end = Ipv4(lineSplit(1))
         ),
         countryCode = lineSplit(2),
         stateProv = lineSplit(3),

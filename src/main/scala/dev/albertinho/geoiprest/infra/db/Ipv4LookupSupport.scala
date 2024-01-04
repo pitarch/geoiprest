@@ -1,6 +1,6 @@
 package dev.albertinho.geoiprest.infra.db
 
-import dev.albertinho.geoiprest.domain.{IpRangeGeoInfo, Ipv4, Ipv4Range}
+import dev.albertinho.geoiprest.domain._
 
 import scala.annotation.tailrec
 
