@@ -1,6 +1,6 @@
 package dev.albertinho.geoiprest.infra.db
 
-import dev.albertinho.geoiprest.domain._
+import dev.albertinho.geoiprest.domain.models.{Ipv4, Ipv4Range}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 

@@ -1,4 +1,6 @@
-package dev.albertinho.geoiprest.domain
+package dev.albertinho.geoiprest.domain.models
+
+import dev.albertinho.geoiprest.domain.models
 
 final case class Ipv4 private(address: Ipv4Address) {
   def toLong: Long =
@@ -21,7 +23,7 @@ object Ipv4 {
     if (parts.length != 4)
       throw new IllegalArgumentException(s"Invalid IPv4 address: $raw")
     val bytes = parts.map(_.toInt)
-    Ipv4((bytes(0), bytes(1), bytes(2), bytes(3)))
+    models.Ipv4((bytes(0), bytes(1), bytes(2), bytes(3)))
   }
 
   implicit val ordering: Ordering[Ipv4] =
@@ -32,6 +34,6 @@ object Ipv4 {
     val part2 = (ip >> 16) & 0xFF
     val part3 = (ip >> 8) & 0xFF
     val part4 = ip & 0xFF
-    Ipv4((part1.toInt, part2.toInt, part3.toInt, part4.toInt))
+    models.Ipv4((part1.toInt, part2.toInt, part3.toInt, part4.toInt))
   }
 }

@@ -1,4 +1,4 @@
-package dev.albertinho.geoiprest.domain
+package dev.albertinho.geoiprest.domain.models
 
 final case class Ipv4Range(start: Ipv4, end: Ipv4) {
 

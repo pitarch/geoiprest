@@ -3,7 +3,7 @@ package dev.albertinho.geoiprest.infra.db
 import cats.effect.kernel.Sync
 import cats.effect.std.MapRef
 import cats.implicits._
-import dev.albertinho.geoiprest.domain.IpRangeGeoInfo
+import dev.albertinho.geoiprest.domain.models.IpRangeGeoInfo
 
 trait Builder[F[_]] {
 

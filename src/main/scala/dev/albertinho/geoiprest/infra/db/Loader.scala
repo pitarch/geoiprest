@@ -1,6 +1,6 @@
 package dev.albertinho.geoiprest.infra.db
 
-import dev.albertinho.geoiprest.domain._
+import dev.albertinho.geoiprest.domain.models.IpRangeGeoInfo
 import fs2.io.file.Files
 
 import scala.util.Try

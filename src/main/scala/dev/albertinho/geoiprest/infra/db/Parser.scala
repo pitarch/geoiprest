@@ -1,8 +1,8 @@
 package dev.albertinho.geoiprest.infra.db
 
 import scala.util.Try
-import dev.albertinho.geoiprest.domain._
 import cats.ApplicativeError
+import dev.albertinho.geoiprest.domain.models.{IpRangeGeoInfo, Ipv4, Ipv4Range}
 
 trait Parser[F[_]] {
   def parse(line: String): F[IpRangeGeoInfo]

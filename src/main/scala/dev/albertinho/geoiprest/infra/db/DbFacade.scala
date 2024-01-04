@@ -1,7 +1,7 @@
 package dev.albertinho.geoiprest.infra.db
 
 import cats.effect.kernel.Sync
-import dev.albertinho.geoiprest.domain.{IpRangeGeoInfo, Ipv4}
+import dev.albertinho.geoiprest.domain.models.{IpRangeGeoInfo, Ipv4}
 
 trait DbFacade[F[_]] {
 
