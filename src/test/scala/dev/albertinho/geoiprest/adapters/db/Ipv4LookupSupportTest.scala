@@ -1,4 +1,4 @@
-package dev.albertinho.geoiprest.infra.db
+package dev.albertinho.geoiprest.adapters.db
 
 import dev.albertinho.geoiprest.domain.models.{Ipv4, Ipv4Range}
 import org.scalatest.flatspec.AsyncFlatSpec

@@ -1,4 +1,4 @@
-package dev.albertinho.geoiprest.infra.db
+package dev.albertinho.geoiprest.adapters.db
 
 import cats.effect.kernel.Sync
 import cats.effect.std.MapRef

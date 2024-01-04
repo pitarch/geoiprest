@@ -1,8 +1,8 @@
-package dev.albertinho.geoiprest.infra.db
+package dev.albertinho.geoiprest.adapters.db
 
 import cats.effect.IO
 import cats.effect.testing.scalatest.AsyncIOSpec
-import dev.albertinho.geoiprest.infra.db.BuilderTest.{createGeoInfo, createIpRangesWithSize}
+import BuilderTest.{createGeoInfo, createIpRangesWithSize}
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers

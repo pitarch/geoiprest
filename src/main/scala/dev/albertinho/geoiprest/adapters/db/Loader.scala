@@ -1,4 +1,4 @@
-package dev.albertinho.geoiprest.infra.db
+package dev.albertinho.geoiprest.adapters.db
 
 import dev.albertinho.geoiprest.domain.models.IpRangeGeoInfo
 import fs2.io.file.Files

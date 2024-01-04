@@ -1,4 +1,4 @@
-package dev.albertinho.geoiprest.infra.db
+package dev.albertinho.geoiprest.adapters.db
 
 import scala.util.Try
 import cats.ApplicativeError
