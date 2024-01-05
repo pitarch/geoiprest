@@ -15,6 +15,7 @@ lazy val root = (project in file("."))
       "org.http4s" %% "http4s-dsl" % Http4sVersion,
       "io.circe" %% "circe-generic" % CirceVersion,
       "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0" % Test,
+      "org.scalacheck" %% "scalacheck" % "1.17.0" % Test,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Runtime
     ),
     testFrameworks += new TestFramework("org.scalatest.tools.Framework"),
