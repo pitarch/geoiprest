@@ -24,7 +24,7 @@ class RestControllerTest extends AsyncFlatSpec with Matchers with AsyncIOSpec {
     }
   }
 
-  it should "returns geoip when there is matching geoip" in {
+  it should "return geoip when there is matching geoip" in {
     val expectedGeoipInfo = genGeoipInfo.sample
     val process = createRequestProcessor(expectedGeoipInfo)
     val request = Request[IO](uri = uri"/geoip/1.2.3.4")
@@ -36,6 +36,14 @@ class RestControllerTest extends AsyncFlatSpec with Matchers with AsyncIOSpec {
     ioResult.asserting { case (status, body) =>
       status.code shouldBe 200
       body shouldBe expectedGeoipInfo.get
+    }
+  }
+
+  it should "return bad request error when malformed input ip" in {
+    val process = createRequestProcessor(None)
+    val request = Request[IO](uri = uri"/geoip/1.2.3")
+    process(request).asserting { response =>
+      response.status shouldBe org.http4s.Status.BadRequest
     }
   }
 
