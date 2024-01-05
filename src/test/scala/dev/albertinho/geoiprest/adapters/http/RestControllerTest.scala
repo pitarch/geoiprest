@@ -42,8 +42,14 @@ class RestControllerTest extends AsyncFlatSpec with Matchers with AsyncIOSpec {
   it should "return bad request error when malformed input ip" in {
     val process = createRequestProcessor(None)
     val request = Request[IO](uri = uri"/geoip/1.2.3")
-    process(request).asserting { response =>
-      response.status shouldBe org.http4s.Status.BadRequest
+    val ioResult = for {
+      response <- process(request)
+      body <- response.as[String]
+    } yield (response.status, body)
+
+    ioResult.asserting { case (status, body) =>
+      status.code shouldBe 400
+      body shouldBe "Malformed ip: 1.2.3"
     }
   }
 
@@ -54,7 +60,14 @@ class RestControllerTest extends AsyncFlatSpec with Matchers with AsyncIOSpec {
     state <- Gen.alphaStr.map(_.take(5))
     city <- Gen.alphaStr.map(_.take(5))
     ipRange = Ipv4Range(Ipv4.fromLong(start), Ipv4.fromLong(end))
-  } yield IpRangeGeoInfo(ipRange, s"countryCode$countryCode", s"state$state", s"city$city", 0.0d, 0.0d)
+  } yield IpRangeGeoInfo(
+    ipRange,
+    s"countryCode$countryCode",
+    s"state$state",
+    s"city$city",
+    0.0d,
+    0.0d
+  )
 
   private def createRequestProcessor(maybeGeoInfo: Option[IpRangeGeoInfo]) = {
 

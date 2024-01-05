@@ -24,8 +24,7 @@ class RestController[F[_]: Async](service: GeoipService[F])
     }
     Async[F].pure(rawIp).map(Ipv4.apply).attempt.flatMap {
       case Right(_) => doGetRestInfo(rawIp)
-      case Left(_)  => BadRequest()
+      case Left(_)  => BadRequest(s"Malformed ip: $rawIp")
     }
-
   }
 }
