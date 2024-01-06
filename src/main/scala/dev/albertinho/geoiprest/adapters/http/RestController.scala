@@ -28,3 +28,9 @@ class RestController[F[_]: Async](service: GeoipService[F])
     }
   }
 }
+
+
+object RestController {
+  def make[F[_]: Async](service: GeoipService[F]): RestController[F] =
+    new RestController[F](service)
+}

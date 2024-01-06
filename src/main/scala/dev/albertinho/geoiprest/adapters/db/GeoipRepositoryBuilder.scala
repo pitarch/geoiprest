@@ -5,24 +5,24 @@ import cats.effect.std.MapRef
 import cats.implicits._
 import dev.albertinho.geoiprest.domain.models.IpRangeGeoInfo
 
-trait Builder[F[_]] {
+trait GeoipRepositoryBuilder[F[_]] {
 
-  def build(stream: fs2.Stream[F, IpRangeGeoInfo]): F[DbFacade[F]]
+  def build(stream: fs2.Stream[F, IpRangeGeoInfo]): F[GeoipRepository[F]]
 }
 
-object Builder {
+object GeoipRepositoryBuilder {
 
-  def make[F[_]: Sync]: Builder[F] = new ShardedBuilder[F]
+  def make[F[_]: Sync]: GeoipRepositoryBuilder[F] = new ShardedBuilder[F]
 
-  class ShardedBuilder[F[_]: Sync] extends Builder[F] {
+  class ShardedBuilder[F[_]: Sync] extends GeoipRepositoryBuilder[F] {
     override def build(
         stream: fs2.Stream[F, IpRangeGeoInfo]
-    ): F[DbFacade[F]] = {
+    ): F[GeoipRepository[F]] = {
       MapRef
         .ofConcurrentHashMap[F, Int, Vector[IpRangeGeoInfo]]()
         .flatMap { ref =>
           buildWithRef(stream, ref) *> Sync[F].delay(
-            ShardedDbFacade.make[F](ref)
+            ShardedGeoipRepository.make[F](ref)
           )
         }
     }

@@ -4,11 +4,11 @@ import scala.util.Try
 import cats.ApplicativeError
 import dev.albertinho.geoiprest.domain.models.{IpRangeGeoInfo, Ipv4, Ipv4Range}
 
-trait Parser[F[_]] {
+trait GeoipCsvEntryParser[F[_]] {
   def parse(line: String): F[IpRangeGeoInfo]
 }
 
-object Parser {
+object GeoipCsvEntryParser {
 
   def parseLine[F[_]](
       line: String

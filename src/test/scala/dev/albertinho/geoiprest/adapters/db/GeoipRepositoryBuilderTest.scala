@@ -2,20 +2,20 @@ package dev.albertinho.geoiprest.adapters.db
 
 import cats.effect.IO
 import cats.effect.testing.scalatest.AsyncIOSpec
-import BuilderTest.{createGeoInfo, createIpRangesWithSize}
+import GeoipRepositoryBuilderTest.{createGeoInfo, createIpRangesWithSize}
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import cats.implicits._
 import dev.albertinho.geoiprest.domain.models.{IpRangeGeoInfo, Ipv4, Ipv4Range}
 
-class BuilderTest
+class GeoipRepositoryBuilderTest
     extends AsyncFlatSpec
     with Matchers
     with AsyncIOSpec
     with OptionValues {
 
-  private lazy val builder = Builder.make[IO]
+  private lazy val builder = GeoipRepositoryBuilder.make[IO]
 
 
   it should "build an ordered sequence when stream is not empty" in {
@@ -36,7 +36,7 @@ class BuilderTest
   }
 }
 
-object BuilderTest {
+object GeoipRepositoryBuilderTest {
 
   def createGeoInfo(
       stream: fs2.Stream[IO, Ipv4Range]

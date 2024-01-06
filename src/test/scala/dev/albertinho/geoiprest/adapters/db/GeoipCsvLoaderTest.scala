@@ -7,7 +7,7 @@ import org.scalatest.Inspectors
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class LoaderTest
+class GeoipCsvLoaderTest
     extends AsyncFlatSpec
     with AsyncIOSpec
     with Matchers
@@ -22,7 +22,7 @@ class LoaderTest
 
   it should "be read and parsed when empty" in {
     val content = ""
-    val loader = Loader.fromString[IO](content)
+    val loader = GeoipCsvLoader.fromString[IO](content)
     loader.stream.compile.toList.asserting { result =>
       result shouldBe empty
     }
@@ -30,7 +30,7 @@ class LoaderTest
 
   it should "be read and parsed when non-empty" in {
 
-    val loader = Loader.fromString[IO](content)
+    val loader = GeoipCsvLoader.fromString[IO](content)
     val resultIO = loader.stream.compile.toList
     resultIO.asserting { result =>
       result should have length 2
@@ -47,7 +47,7 @@ class LoaderTest
 
   it should "read and parse" in {
     createFileResourceWithContent(content).use { path =>
-      val loader = Loader.fromFile[IO](path.toString)
+      val loader = GeoipCsvLoader.fromFile[IO](path.toString)
       val resultIO = loader.stream.compile.toList
       resultIO.asserting { result =>
         result should have length 2

@@ -5,15 +5,15 @@ import fs2.io.file.Files
 
 import scala.util.Try
 
-trait Loader[F[_]] {
+trait GeoipCsvLoader[F[_]] {
 
   def stream: fs2.Stream[F, (Long, Try[IpRangeGeoInfo])]
 }
 
-object Loader {
+object GeoipCsvLoader {
 
-  def fromFile[F[_]: Files](file: String): Loader[F] =
-    new Loader[F] {
+  def fromFile[F[_]: Files](file: String): GeoipCsvLoader[F] =
+    new GeoipCsvLoader[F] {
       override def stream: fs2.Stream[F, (Long, Try[IpRangeGeoInfo])] =
         fs2.io.file
           .Files[F]
@@ -21,8 +21,8 @@ object Loader {
           .through(parseLine)
     }
 
-  def fromString[F[_]](content: String): Loader[F] =
-    new Loader[F] {
+  def fromString[F[_]](content: String): GeoipCsvLoader[F] =
+    new GeoipCsvLoader[F] {
       override def stream: fs2.Stream[F, (Long, Try[IpRangeGeoInfo])] =
         fs2.Stream
           .emits(content.split("\n"))
@@ -36,5 +36,5 @@ object Loader {
       .map { _.trim() }
       .zipWithIndex
       .filter { case (line, _) => line.nonEmpty }
-      .map { case (line, index) => (index, Parser.parseLineUnsafe(line)) }
+      .map { case (line, index) => (index, GeoipCsvEntryParser.parseLineUnsafe(line)) }
 }

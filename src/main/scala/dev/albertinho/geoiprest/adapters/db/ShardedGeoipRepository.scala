@@ -5,10 +5,10 @@ import cats.effect.std.MapRef
 import cats.implicits._
 import dev.albertinho.geoiprest.domain.models.{IpRangeGeoInfo, Ipv4}
 
-object ShardedDbFacade {
+object ShardedGeoipRepository {
   def make[F[_]: Sync](
       ref: MapRef[F, Int, Option[Vector[IpRangeGeoInfo]]]
-  ): DbFacade[F] = (ip: Ipv4) => for {
+  ): GeoipRepository[F] = (ip: Ipv4) => for {
     infos <- ref(ip.part1).get
     result <- Sync[F].delay(Ipv4LookupSupport.find(ip, infos.getOrElse(Vector.empty)))
   } yield result
