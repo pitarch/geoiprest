@@ -4,21 +4,21 @@ import cats.effect.{IO, IOApp}
 import dev.albertinho.geoiprest.adapters.db.{GeoipCsvLoader, GeoipRepository, GeoipRepositoryBuilder}
 import dev.albertinho.geoiprest.adapters.http.{RestServerConfig, RestServerFactory}
 import dev.albertinho.geoiprest.domain.services.GeoipServiceImpl
+import org.typelevel.log4cats.slf4j.Slf4jLogger
 
 object Main extends IOApp.Simple {
-  def run: cats.effect.IO[Unit] = {
-    val ioService = getDbFacade.map(GeoipServiceImpl.make[IO])
-    val ioConfig = IO.fromEither(RestServerConfig.make("0.0.0.0", 8081))
-    val res = for {
-      service <- ioService
-      config <- ioConfig
-      server = RestServerFactory.make[IO](config, service)
-    } yield server.allocated.map(_._2)
-
-    res.foreverM
-  }
+  def run: cats.effect.IO[Unit] =
+    for {
+      config <- IO.fromEither(RestServerConfig.make("0.0.0.0", 8081))
+      service <- getDbFacade.map(GeoipServiceImpl.make[IO])
+      server <- RestServerFactory
+        .make[IO](config, service)
+        .use(_ => IO.never)
+        .void
+    } yield server
 
   private def getDbFacade: IO[GeoipRepository[IO]] = {
+    implicit val logger = Slf4jLogger.getLogger[IO]
     val loader = GeoipCsvLoader.fromFile[IO](
       "/Users/pitarch/code/sandboxes/geoiprest/data/dbip-city-ipv4.csv"
     )
@@ -26,7 +26,11 @@ object Main extends IOApp.Simple {
     val cleanedStream = loader.stream.map(_._2).collect {
       case scala.util.Success(value) => value
     }
-    val facade = builder.build(cleanedStream)
-    facade
+    for {
+      logger <- Slf4jLogger.create[IO]
+      _ <- logger.info("Loading database...")
+      repo <- builder.build(cleanedStream)
+      _ <- logger.info("Database loaded")
+    } yield repo
   }
 }
