@@ -2,9 +2,8 @@ package dev.albertinho.geoiprest.adapters.http
 
 import cats.effect.Async
 import cats.implicits._
-import dev.albertinho.geoiprest.domain.models.Ipv4
+import dev.albertinho.geoiprest.domain.models.{IpRangeGeoInfo, Ipv4}
 import dev.albertinho.geoiprest.ports.GeoipService
-import io.circe.generic.auto._
 import org.http4s.circe.CirceEntityCodec.circeEntityEncoder
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{HttpRoutes, Response}
@@ -27,8 +26,29 @@ class RestController[F[_]: Async](service: GeoipService[F])
       case Left(_)  => BadRequest(s"Malformed ip: $rawIp")
     }
   }
-}
 
+  // create an implicit circe encoder for IpRangeGeoInfo
+  implicit val encoderIpRangeGeoInfo: io.circe.Encoder[IpRangeGeoInfo] =
+    io.circe.Encoder.forProduct7(
+      "countryCode",
+      "stateProv",
+      "city",
+      "latitude",
+      "longitude",
+      "startAddress",
+      "endAddress"
+    )(info =>
+      (
+        info.countryCode,
+        info.stateProv,
+        info.city,
+        info.latitude,
+        info.longitude,
+        info.ipRange.start.toString(),
+        info.ipRange.end.toString()
+      )
+    )
+}
 
 object RestController {
   def make[F[_]: Async](service: GeoipService[F]): RestController[F] =
