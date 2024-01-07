@@ -1,17 +1,22 @@
 package dev.albertinho.geoiprest.adapters.db
 
-import cats.effect.IO
+import cats.effect.{IO, Sync}
 import cats.effect.kernel.Resource
 import cats.effect.testing.scalatest.AsyncIOSpec
 import org.scalatest.Inspectors
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.typelevel.log4cats.Logger
+import org.typelevel.log4cats.slf4j.Slf4jLogger
 
 class GeoipCsvLoaderTest
     extends AsyncFlatSpec
     with AsyncIOSpec
     with Matchers
     with Inspectors {
+
+  implicit def logger[F[_]: Sync]: Logger[F] = Slf4jLogger.getLogger[F]
+
 
   private val content = """
     |1.0.0.0,1.0.0.255,AU,Queensland,,South Brisbane,,-27.4767,153.017,

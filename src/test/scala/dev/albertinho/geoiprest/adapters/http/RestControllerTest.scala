@@ -2,9 +2,10 @@ package dev.albertinho.geoiprest.adapters.http
 
 import cats.effect.IO
 import cats.effect.testing.scalatest.AsyncIOSpec
+import cats.implicits.catsSyntaxOptionId
 import dev.albertinho.geoiprest.domain.models.{IpRangeGeoInfo, Ipv4, Ipv4Range}
 import dev.albertinho.geoiprest.ports.GeoipService
-import io.circe.generic.auto._
+import io.circe.Json
 import org.http4s.circe.CirceEntityCodec.circeEntityDecoder
 import org.http4s.implicits.http4sLiteralsSyntax
 import org.http4s.{Request, Response}
@@ -30,12 +31,32 @@ class RestControllerTest extends AsyncFlatSpec with Matchers with AsyncIOSpec {
     val request = Request[IO](uri = uri"/geoip/1.2.3.4")
     val ioResult = for {
       response <- process(request)
-      body <- response.as[IpRangeGeoInfo]
+      body <- response.as[Json]
     } yield (response.status, body)
 
     ioResult.asserting { case (status, body) =>
       status.code shouldBe 200
-      body shouldBe expectedGeoipInfo.get
+      body.hcursor
+        .downField("countryCode")
+        .as[String].toOption shouldBe expectedGeoipInfo.get.countryCode.some
+      body.hcursor
+        .downField("stateProv")
+        .as[String].toOption shouldBe expectedGeoipInfo.get.stateProv.some
+      body.hcursor
+        .downField("city")
+        .as[String].toOption shouldBe expectedGeoipInfo.get.city.some
+      body.hcursor
+        .downField("latitude")
+        .as[Double].toOption shouldBe expectedGeoipInfo.get.latitude.some
+      body.hcursor
+        .downField("longitude")
+        .as[Double].toOption shouldBe expectedGeoipInfo.get.longitude.some
+      body.hcursor
+        .downField("startAddress")
+        .as[String].toOption shouldBe expectedGeoipInfo.get.ipRange.start.toString().some
+      body.hcursor
+        .downField("endAddress")
+        .as[String].toOption shouldBe expectedGeoipInfo.get.ipRange.end.toString().some
     }
   }
 
