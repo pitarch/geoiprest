@@ -9,7 +9,8 @@ import org.typelevel.log4cats.slf4j.Slf4jLogger
 object Main extends IOApp.Simple {
   def run: cats.effect.IO[Unit] =
     for {
-      config <- IO.fromEither(RestServerConfig.make("0.0.0.0", 8081))
+      config <- RestServerConfig.loadResource[IO]
+        //IO.fromEither(RestServerConfig.make("0.0.0.0", 8081))
       service <- getDbFacade.map(GeoipServiceImpl.make[IO])
       server <- RestServerFactory
         .make[IO](config, service)
